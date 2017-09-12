@@ -43,6 +43,12 @@ if __name__ == '__main__':
     cpu = 0
     mem = 0
     rate = rospy.Rate(10.0)
+    rospack = rospkg.RosPack()
+    rospack.list()
+    path =rospack.get_path("loc_evaluation")
+    path = path + "/data/"
+    file_cpu = open(path + file_name + 'cpu.txt','w+')
+    file_mem = open(path + file_name + 'mem.txt','w+')
 
     while not rospy.is_shutdown():
         rate.sleep()
@@ -50,15 +56,13 @@ if __name__ == '__main__':
         mem = mem + process.get_memory_percent()
         count = count + 1
         if (count%10 == 0):
-            rospack = rospkg.RosPack()
-            rospack.list()
-            path =rospack.get_path("loc_evaluation")
-            path = path + "/data/"
-            file = open(path + file_name + '.txt','w+')
-            print "average CPU percentage is: " + str(cpu/count)
-            print "average Memory percentage is: " + str(mem/count)
-            file.write("cpu_mean: "+str(cpu/count)+"\n");
-            file.write("mem_mean: "+str(mem/count));
-            file.close()
+
+            file_cpu.write(str(cpu/count)+'\n')
+            file_mem.write(str(mem/count)+'\n')
+#            print "average CPU percentage is: " + str(cpu/count)
+#            print "average Memory percentage is: " + str(mem/count)
+#            file.write("cpu_mean: "+str(cpu/count)+"\n");
+#            file.write("mem_mean: "+str(mem/count));
+#            file.close()
 
 
